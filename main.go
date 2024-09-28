@@ -11,6 +11,7 @@ import (
 func main() {
     r := gin.Default()
     lc := weather.LocationController{}
+    wc := weather.WeatherController{}
 	db := weather.BootstrapDatabase("./")
 
     lc.InitializeLocations(db)
@@ -27,6 +28,7 @@ func main() {
         ctx := c.Request.Context()
         ctx = context.WithValue(ctx, "db", db)
         ctx = context.WithValue(ctx, "lc", lc)
+        ctx = context.WithValue(ctx, "wc", wc)
         h.ContextHandler(ctx, c.Writer, c.Request)
     })
 
