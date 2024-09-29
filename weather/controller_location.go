@@ -59,15 +59,13 @@ func (lc *LocationController) GetLocations(db Database) ([]Location, error) {
 }
 
 // DeleteLocation removes a location from the database based on its unique ID
-func (lc *LocationController) DeleteLocation(db Database, latitude, longitude string) error {
-    // Generate the unique ID from the coordinates
-    id := GenerateID(latitude, longitude)
+func (lc *LocationController) DeleteLocation(db Database, id string) error {
 
     // Check if the location exists in the database
     var location Location
     err := db.d.Read("locations", id, &location)
     if err != nil {
-        return fmt.Errorf("location with latitude %s and longitude %s does not exist", latitude, longitude)
+        return fmt.Errorf("location with id %s does not exist", id)
     }
 
     // Delete the location from the database

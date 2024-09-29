@@ -72,6 +72,7 @@ type WeatherForecastInfo struct {
 
 // CurrentWeatherInfo represents the current weather data returned from the weatherForLocations query
 type CurrentWeatherInfo struct {
+	ID				string	`json:"id"`
     LocationName    string  `json:"location_name"`
     Latitude        string  `json:"latitude"`
     Longitude       string  `json:"longitude"`

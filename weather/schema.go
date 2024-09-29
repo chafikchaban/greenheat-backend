@@ -65,6 +65,9 @@ var DailyDataType = graphql.NewObject(graphql.ObjectConfig{
 var WeatherInfoType = graphql.NewObject(graphql.ObjectConfig{
     Name: "WeatherInfo",
     Fields: graphql.Fields{
+        "id": &graphql.Field{
+            Type: graphql.String,
+        },
         "locationName": &graphql.Field{
             Type: graphql.String,
         },
@@ -217,10 +220,7 @@ var RootQuery = graphql.NewObject(graphql.ObjectConfig{
 				Type:        LocationType,
 				Description: "Delete a location by ID",
 				Args: graphql.FieldConfigArgument{
-					"latitude": &graphql.ArgumentConfig{
-						Type: graphql.NewNonNull(graphql.String),
-					},
-					"longitude": &graphql.ArgumentConfig{
+					"id": &graphql.ArgumentConfig{
 						Type: graphql.NewNonNull(graphql.String),
 					},
 				},
@@ -228,10 +228,9 @@ var RootQuery = graphql.NewObject(graphql.ObjectConfig{
 					db := params.Context.Value("db").(Database)
 					lc := params.Context.Value("lc").(LocationController)
 
-					latitude := params.Args["latitude"].(string)
-					longitude := params.Args["longitude"].(string)
+					id := params.Args["id"].(string)
 
-					err := lc.DeleteLocation(db, latitude, longitude)
+					err := lc.DeleteLocation(db, id)
 
 					if err != nil {
 						return nil, err

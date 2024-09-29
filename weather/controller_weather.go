@@ -122,14 +122,15 @@ func (wc *WeatherController) FetchWeatherForLocations(db Database,lc LocationCon
             // Map query response from OpenMeteo response
 
             weatherInfos = append(weatherInfos, &CurrentWeatherInfo{
-                LocationName:  location.Name, // Append Location Name
-                Latitude:      fmt.Sprintf("%f", data.Latitude),
-                Longitude:     fmt.Sprintf("%f", data.Longitude),
-                Temperature: data.Current.Temperature2m,
-                CloudCoverage: data.Current.CloudCover,
-                WindSpeed:     data.Current.WindSpeed80m,
-                UVIndex:       data.Current.UVIndex,
-                WeatherCode:   data.Current.WeatherCode,
+                ID:             location.ID, // append Location ID
+                LocationName:   location.Name, // Append Location Name
+                Latitude:       fmt.Sprintf("%f", data.Latitude),
+                Longitude:      fmt.Sprintf("%f", data.Longitude),
+                Temperature:    data.Current.Temperature2m,
+                CloudCoverage:  data.Current.CloudCover,
+                WindSpeed:      data.Current.WindSpeed80m,
+                UVIndex:        data.Current.UVIndex,
+                WeatherCode:    data.Current.WeatherCode,
             })
         }
     
