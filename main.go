@@ -4,12 +4,15 @@ package main
 import (
     "context"
     "github.com/gin-gonic/gin"
+    "github.com/gin-contrib/cors"
     "github.com/graphql-go/handler"
     "github.com/chafikchaban/greenheat-backend/weather"
   )
 
 func main() {
     r := gin.Default()
+    r.Use(cors.Default())
+
     lc := weather.LocationController{}
     wc := weather.WeatherController{}
 	db := weather.BootstrapDatabase("./")
