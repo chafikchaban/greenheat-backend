@@ -63,11 +63,16 @@ func (wc *WeatherController) FetchWeatherForecast(db Database, location Location
 
 
 // [ MAP ] FetchWeatherForLocations fetches the weather data for multiple locations at once
-func (wc *WeatherController) FetchWeatherForLocations(db Database, locations []Location) ([]*CurrentWeatherInfo, error) {
+func (wc *WeatherController) FetchWeatherForLocations(db Database,lc LocationController) ([]*CurrentWeatherInfo, error) {
 	// Create arrays of latitudes and longitudes
 	var latitudes []string
 	var longitudes []string
     var weatherInfos []*CurrentWeatherInfo
+
+    locations, err := lc.GetLocations(db)
+    if err != nil {
+        return nil, err
+    }
 
 	for _, location := range locations {
 		latitudes = append(latitudes, location.Latitude)
@@ -79,7 +84,7 @@ func (wc *WeatherController) FetchWeatherForLocations(db Database, locations []L
 	lonStr := strings.Join(longitudes, ",")
 
 	// Construct the OpenMeteo API URL with the latitudes and longitudes
-	query := fmt.Sprintf("https://api.open-meteo.com/v1/forecast?latitude=%s&longitude=%s&current=temperature_2m,cloud_cover,wind_speed_80m,wind_direction_10m&timezone=auto&format=json", latStr, lonStr)
+	query := fmt.Sprintf("https://api.open-meteo.com/v1/forecast?latitude=%s&longitude=%s&current=temperature_2m,cloud_cover,wind_speed_80m,wind_direction_10m,weather_code&timezone=auto&format=json", latStr, lonStr)
 
 	// Make the HTTP request
 	resp, err := http.Get(query)
@@ -124,6 +129,7 @@ func (wc *WeatherController) FetchWeatherForLocations(db Database, locations []L
                 CloudCoverage: data.Current.CloudCover,
                 WindSpeed:     data.Current.WindSpeed80m,
                 UVIndex:       data.Current.UVIndex,
+                WeatherCode:   data.Current.WeatherCode,
             })
         }
     

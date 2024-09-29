@@ -98,6 +98,9 @@ var WeatherInfoType = graphql.NewObject(graphql.ObjectConfig{
         "hourly": &graphql.Field{
             Type: HourlyDataType,
         },
+        "weatherCode": &graphql.Field{
+            Type: graphql.Int,
+        },
     },
 })
 
@@ -149,28 +152,12 @@ var RootQuery = graphql.NewObject(graphql.ObjectConfig{
 		"weatherForLocations": &graphql.Field{
             Type: graphql.NewList(WeatherInfoType),
             Description: "Get current weather for a list of locations",
-            Args: graphql.FieldConfigArgument{
-                "locationIDs": &graphql.ArgumentConfig{
-                    Type: graphql.NewList(graphql.String),
-                },
-            },
             Resolve: func(params graphql.ResolveParams) (interface{}, error) {
                 db := params.Context.Value("db").(Database)
                 wc := params.Context.Value("wc").(WeatherController)
+                lc := params.Context.Value("lc").(LocationController)
 
-                locationIDs := params.Args["locationIDs"].([]interface{})
-                var locations []Location
-                
-                // Fetch locations from the database
-                for _, id := range locationIDs {
-                    var location Location
-                    if err := db.d.Read("locations", id.(string), &location); err != nil {
-                        return nil, fmt.Errorf("location not found: %v", err)
-                    }
-                    locations = append(locations, location)
-                }
-
-                weatherData, err := wc.FetchWeatherForLocations(db, locations)
+                weatherData, err := wc.FetchWeatherForLocations(db, lc)
                 if err != nil {
                     return nil, fmt.Errorf("could not fetch weather data: %v", err)
                 }

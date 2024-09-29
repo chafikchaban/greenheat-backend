@@ -38,6 +38,7 @@ type CurrentData struct {
 	CloudCover 			int 	`json:"cloud_cover"`
 	WindSpeed80m 		float64 `json:"wind_speed_80m"`
     UVIndex 			float64 `json:"uv_index"`
+	WeatherCode     	int   	`json:"weather_code"`
 
 }
 
@@ -66,6 +67,7 @@ type WeatherForecastInfo struct {
 	Hourly          HourlyData  `json:"hourly"`
 	DailyUnits		DailyUnits  `json:"daily_units"`
 	Daily           DailyData   `json:"daily"`
+	WeatherCode     int   		`json:"weather_code"`
 }
 
 // CurrentWeatherInfo represents the current weather data returned from the weatherForLocations query
@@ -79,4 +81,5 @@ type CurrentWeatherInfo struct {
     CloudCoverage   int 	`json:"cloud_coverage"`
     WindSpeed       float64 `json:"wind_speed"`
     UVIndex         float64 `json:"uv_index"`
+	WeatherCode     int   	`json:"weather_code"`
 }
