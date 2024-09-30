@@ -53,11 +53,23 @@ var DailyDataType = graphql.NewObject(graphql.ObjectConfig{
         "time": &graphql.Field{
             Type: graphql.NewList(graphql.String),
         },
-        "temperature2mMax": &graphql.Field{
+        "temperature_2m_max": &graphql.Field{
             Type: graphql.NewList(graphql.Float),
         },
-        "temperature2mMin": &graphql.Field{
+        "temperature_2m_min": &graphql.Field{
             Type: graphql.NewList(graphql.Float),
+        },
+        "wind_speed_10m_max": &graphql.Field{
+            Type: graphql.String,
+        },
+        "weather_code": &graphql.Field{
+            Type: graphql.Int,
+        },
+        "wind_direction_10m_dominant": &graphql.Field{
+            Type: graphql.Int,
+        },
+        "uv_index_max": &graphql.Field{
+            Type: graphql.String,
         },
     },
 })
@@ -68,19 +80,22 @@ var UnitsType = graphql.NewObject(graphql.ObjectConfig{
         "time": &graphql.Field{
             Type: graphql.String,
         },
-        "temperature2m": &graphql.Field{
+        "temperature_2m": &graphql.Field{
             Type: graphql.String,
         },
-        "temperature2mMax": &graphql.Field{
+        "temperature_2m_max": &graphql.Field{
             Type: graphql.String,
         },
-        "temperature2mMin": &graphql.Field{
+        "temperature_2m_min": &graphql.Field{
             Type: graphql.String,
         },
         "cloud_cover": &graphql.Field{
             Type: graphql.String,
         },
         "wind_speed_80m": &graphql.Field{
+            Type: graphql.String,
+        },
+        "wind_speed_10m_max": &graphql.Field{
             Type: graphql.String,
         },
         "uv_index": &graphql.Field{
@@ -128,7 +143,7 @@ var WeatherInfoType = graphql.NewObject(graphql.ObjectConfig{
         "hourly": &graphql.Field{
             Type: HourlyDataType,
         },
-        "weatherCode": &graphql.Field{
+        "weather_code": &graphql.Field{
             Type: graphql.Int,
         },
         "units": &graphql.Field{
@@ -139,6 +154,9 @@ var WeatherInfoType = graphql.NewObject(graphql.ObjectConfig{
         },
         "hourlyUnits": &graphql.Field{
             Type: UnitsType,
+        },
+        "wind_direction_10m": &graphql.Field{
+            Type: graphql.Int,
         },
     },
 })

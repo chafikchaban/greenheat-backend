@@ -16,7 +16,7 @@ func (wc *WeatherController) FetchWeatherForecast(db Database, location Location
     weatherInfo := &WeatherForecastInfo{}
 
 	// Construct the OpenMeteo API URL with the latitudes and longitudes
-	query := fmt.Sprintf("https://api.open-meteo.com/v1/forecast?latitude=%s&longitude=%s&daily=temperature_2m_max,temperature_2m_min&forecast_days=7&timezone=auto&format=json", location.Latitude, location.Longitude)
+	query := fmt.Sprintf("https://api.open-meteo.com/v1/forecast?latitude=%s&longitude=%s&daily=weather_code,uv_index_max,wind_speed_10m_max,wind_direction_10m_dominant,temperature_2m_max,temperature_2m_min&forecast_days=7&timezone=auto&format=json", location.Latitude, location.Longitude)
 
 	// Make the HTTP request
 	resp, err := http.Get(query)
@@ -123,16 +123,17 @@ func (wc *WeatherController) FetchWeatherForLocations(db Database,lc LocationCon
             // Map query response from OpenMeteo response
 
             weatherInfos = append(weatherInfos, &CurrentWeatherInfo{
-                ID:             location.ID, // append Location ID
-                LocationName:   location.Name, // Append Location Name
-                Latitude:       fmt.Sprintf("%f", data.Latitude),
-                Longitude:      fmt.Sprintf("%f", data.Longitude),
-                Temperature:    data.Current.Temperature2m,
-                CloudCoverage:  data.Current.CloudCover,
-                WindSpeed:      data.Current.WindSpeed80m,
-                UVIndex:        data.Current.UVIndex,
-                WeatherCode:    data.Current.WeatherCode,
-                Units:          data.CurrentUnits,
+                ID:                 location.ID, // append Location ID
+                LocationName:       location.Name, // Append Location Name
+                Latitude:           fmt.Sprintf("%f", data.Latitude),
+                Longitude:          fmt.Sprintf("%f", data.Longitude),
+                Temperature:        data.Current.Temperature2m,
+                CloudCoverage:      data.Current.CloudCover,
+                WindSpeed:          data.Current.WindSpeed80m,
+                UvIndex:            data.Current.UvIndex,
+                WeatherCode:        data.Current.WeatherCode,
+                WindDirectionAngle: data.Current.WindDirectionAngle,
+                Units:              data.CurrentUnits,
             })
         }
     
