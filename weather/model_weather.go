@@ -29,7 +29,7 @@ type DailyData struct {
 	WindSpeed10mMax  	[]float64 	`json:"wind_speed_10m_max"`
 	WeatherCode     	[]int   	`json:"weather_code"`
 	WindDirectionAngle  []int   	`json:"wind_direction_10m_dominant"`
-	UvIndex       		[]float64 	`json:"uv_index_max"`
+	UvIndexMax      	[]float64 	`json:"uv_index_max"`
 
 }
 
@@ -83,6 +83,7 @@ type CurrentWeatherInfo struct {
     CloudCoverage   	int 	`json:"cloud_coverage"`
     WindSpeed       	float64 `json:"wind_speed"`
     UvIndex         	float64 `json:"uv_index"`
+	UvIndexMax      	[]float64 `json:"uv_index_max"`
 	WeatherCode     	int   	`json:"weather_code"`
 	WindDirectionAngle 	int 	`json:"wind_direction_10m"`
 	Units 				Units   `json:"units"`

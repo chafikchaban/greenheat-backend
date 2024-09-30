@@ -60,16 +60,16 @@ var DailyDataType = graphql.NewObject(graphql.ObjectConfig{
             Type: graphql.NewList(graphql.Float),
         },
         "wind_speed_10m_max": &graphql.Field{
-            Type: graphql.String,
+            Type:  graphql.NewList(graphql.Float),
         },
         "weather_code": &graphql.Field{
-            Type: graphql.Int,
+            Type: graphql.NewList(graphql.Int),
         },
         "wind_direction_10m_dominant": &graphql.Field{
-            Type: graphql.Int,
+            Type: graphql.NewList(graphql.Int),
         },
         "uv_index_max": &graphql.Field{
-            Type: graphql.String,
+            Type: graphql.NewList(graphql.Int),
         },
     },
 })
