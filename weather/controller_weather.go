@@ -53,6 +53,7 @@ func (wc *WeatherController) FetchWeatherForecast(db Database, location Location
             Latitude:      existing.Latitude,
             Longitude:     existing.Longitude,
             Daily: weatherData.Daily,
+            DailyUnits: weatherData.DailyUnits,
             Hourly: weatherData.Hourly,
         }
     }
@@ -131,6 +132,7 @@ func (wc *WeatherController) FetchWeatherForLocations(db Database,lc LocationCon
                 WindSpeed:      data.Current.WindSpeed80m,
                 UVIndex:        data.Current.UVIndex,
                 WeatherCode:    data.Current.WeatherCode,
+                Units:          data.CurrentUnits,
             })
         }
     

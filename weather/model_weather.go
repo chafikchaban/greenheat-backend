@@ -1,9 +1,11 @@
 package weather
 
-// HourlyUnits represents units used in the hourly forecast.
-type HourlyUnits struct {
+// Units represents units used in the current,hourly or daily response.
+type Units struct {
 	Time          string `json:"time"`
 	Temperature2m string `json:"temperature_2m"`
+	Temperature2mMax string `json:"temperature_2m_max"`
+	Temperature2mMin string `json:"temperature_2m_min"`
 	CloudCover    string `json:"cloud_cover"`
 	WindSpeed80m  string `json:"wind_speed_80m"`
 	UvIndex       string `json:"uv_index"`
@@ -16,13 +18,6 @@ type HourlyData struct {
 	CloudCover    []int     `json:"cloud_cover"`
 	WindSpeed80m  []float64 `json:"wind_speed_80m"`
 	UvIndex       []float64 `json:"uv_index"`
-}
-
-// DailyUnits represents units used in the daily forecast.
-type DailyUnits struct {
-	Time          string 	`json:"time"`
-	Temperature2mMax string `json:"temperature_2m_max"`
-	Temperature2mMin string `json:"temperature_2m_min"`
 }
 
 // DailyData represents the data in the daily forecast.
@@ -39,23 +34,23 @@ type CurrentData struct {
 	WindSpeed80m 		float64 `json:"wind_speed_80m"`
     UVIndex 			float64 `json:"uv_index"`
 	WeatherCode     	int   	`json:"weather_code"`
-
 }
 
 // WeatherResponse represents the Open Meteo response payload.
 type WeatherResponse struct {
-	Latitude           float64     `json:"latitude"`
-	Longitude          float64     `json:"longitude"`
-	GenerationTimeMs   float64     `json:"generationtime_ms"`
-	UtcOffsetSeconds   int         `json:"utc_offset_seconds"`
-	Timezone           string      `json:"timezone"`
-	TimezoneAbbreviation string    `json:"timezone_abbreviation"`
-	Elevation          float64     `json:"elevation"`
-	HourlyUnits        HourlyUnits `json:"hourly_units"`
-	Hourly             HourlyData  `json:"hourly"`
-	DailyUnits         DailyUnits  `json:"daily_units"`
-	Daily              DailyData   `json:"daily"`
-	Current 		   CurrentData `json:"current"`
+	Latitude           		float64     `json:"latitude"`
+	Longitude          		float64     `json:"longitude"`
+	GenerationTimeMs   		float64     `json:"generationtime_ms"`
+	UtcOffsetSeconds   		int         `json:"utc_offset_seconds"`
+	Timezone           		string      `json:"timezone"`
+	TimezoneAbbreviation 	string    `json:"timezone_abbreviation"`
+	Elevation          		float64     `json:"elevation"`
+	HourlyUnits        		Units `json:"hourly_units"`
+	Hourly             		HourlyData  `json:"hourly"`
+	DailyUnits         		Units  `json:"daily_units"`
+	Daily              		DailyData   `json:"daily"`
+	Current 		   		CurrentData `json:"current"`
+	CurrentUnits 			Units `json:"current_units"`
 }
 
 // WeatherForecastInfo represents the  weather forecast data returned from the weatherForecast query
@@ -63,9 +58,9 @@ type WeatherForecastInfo struct {
     LocationName    string  	`json:"location_name"`
     Latitude        string  	`json:"latitude"`
     Longitude       string  	`json:"longitude"`
-	HourlyUnits     HourlyUnits `json:"hourly_units"`
+	HourlyUnits     Units `json:"hourly_units"`
 	Hourly          HourlyData  `json:"hourly"`
-	DailyUnits		DailyUnits  `json:"daily_units"`
+	DailyUnits		Units  `json:"daily_units"`
 	Daily           DailyData   `json:"daily"`
 	WeatherCode     int   		`json:"weather_code"`
 }
@@ -83,4 +78,5 @@ type CurrentWeatherInfo struct {
     WindSpeed       float64 `json:"wind_speed"`
     UVIndex         float64 `json:"uv_index"`
 	WeatherCode     int   	`json:"weather_code"`
+	Units 			Units   `json:"units"`
 }

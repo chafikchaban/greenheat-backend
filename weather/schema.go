@@ -62,6 +62,33 @@ var DailyDataType = graphql.NewObject(graphql.ObjectConfig{
     },
 })
 
+var UnitsType = graphql.NewObject(graphql.ObjectConfig{
+    Name: "Units",
+    Fields: graphql.Fields{
+        "time": &graphql.Field{
+            Type: graphql.String,
+        },
+        "temperature2m": &graphql.Field{
+            Type: graphql.String,
+        },
+        "temperature2mMax": &graphql.Field{
+            Type: graphql.String,
+        },
+        "temperature2mMin": &graphql.Field{
+            Type: graphql.String,
+        },
+        "cloud_cover": &graphql.Field{
+            Type: graphql.String,
+        },
+        "wind_speed_80m": &graphql.Field{
+            Type: graphql.String,
+        },
+        "uv_index": &graphql.Field{
+            Type: graphql.String,
+        },
+    },
+})
+
 var WeatherInfoType = graphql.NewObject(graphql.ObjectConfig{
     Name: "WeatherInfo",
     Fields: graphql.Fields{
@@ -103,6 +130,15 @@ var WeatherInfoType = graphql.NewObject(graphql.ObjectConfig{
         },
         "weatherCode": &graphql.Field{
             Type: graphql.Int,
+        },
+        "units": &graphql.Field{
+            Type: UnitsType,
+        },
+        "dailyUnits": &graphql.Field{
+            Type: UnitsType,
+        },
+        "hourlyUnits": &graphql.Field{
+            Type: UnitsType,
         },
     },
 })
