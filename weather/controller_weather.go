@@ -12,39 +12,48 @@ type WeatherController struct{
 }
 
 // [ DAILY/WEEKLY ]  FetchWeatherForecast fetches the weather forecast data for a single location
-func (wc *WeatherController) FetchWeatherForecast(db Database, location Location) (*WeatherForecastInfo, error) {
+func (wc *WeatherController) FetchWeatherForecast(db Database, location Location, metrics []string) (*WeatherForecastInfo, error) { 
     weatherInfo := &WeatherForecastInfo{}
 
-	// Construct the OpenMeteo API URL with the latitudes and longitudes
-	query := fmt.Sprintf("https://api.open-meteo.com/v1/forecast?latitude=%s&longitude=%s&daily=weather_code,uv_index_max,wind_speed_10m_max,wind_direction_10m_dominant,temperature_2m_max,temperature_2m_min&forecast_days=7&timezone=auto&format=json", location.Latitude, location.Longitude)
+    // Construct the daily query parameter from the metrics slice
+    dailyMetrics := strings.Join(metrics, ",")
 
-	// Make the HTTP request
-	resp, err := http.Get(query)
-	if err != nil {
-		return nil, fmt.Errorf("failed to fetch weather data: %w", err)
-	}
-	defer resp.Body.Close()
+    // Construct the OpenMeteo API URL with the latitude and longitude
+    query := fmt.Sprintf("https://api.open-meteo.com/v1/forecast?latitude=%s&longitude=%s&daily=%s&forecast_days=7&timezone=auto&format=json", 
+        location.Latitude, 
+        location.Longitude, 
+        dailyMetrics,
+    )
+
+
+    // Make the HTTP request
+    resp, err := http.Get(query)
+    if err != nil {
+        return nil, fmt.Errorf("failed to fetch weather data: %w", err)
+    }
+    defer resp.Body.Close()
 
     body, err := io.ReadAll(resp.Body)
     if err != nil {
         return nil, fmt.Errorf("failed to read response body: %w", err)
     }
     
-	// Parse the response
-	var weatherData WeatherResponse
-	if err := json.Unmarshal(body, &weatherData); err != nil {
+    // Parse the response
+    var weatherData WeatherResponse
+    if err := json.Unmarshal(body, &weatherData); err != nil {
         return nil, fmt.Errorf("failed to parse weather data: %w", err)
-	}
+    }
+    
     // Generate LocationID based on the latitude and longitude of the current location
     var locationID = GenerateID(location.Latitude, location.Longitude)
 
-          // Check if the location exists in the database
-            var existing Location
-            err = db.d.Read("locations", locationID, &existing)
-            if err != nil {
-                // Return a different error message if the location is not found
-                return nil, fmt.Errorf("location with latitude %s and longitude %s does not exist", location.Latitude, location.Longitude)
-            }
+    // Check if the location exists in the database
+    var existing Location
+    err = db.d.Read("locations", locationID, &existing)
+    if err != nil {
+        // Return a different error message if the location is not found
+        return nil, fmt.Errorf("location with latitude %s and longitude %s does not exist", location.Latitude, location.Longitude)
+    }
 
     // Map query response from OpenMeteo response
     if len(weatherData.Daily.Time) > 0 {
@@ -58,7 +67,6 @@ func (wc *WeatherController) FetchWeatherForecast(db Database, location Location
         }
     }
 
-    
     return weatherInfo, nil
 }
 

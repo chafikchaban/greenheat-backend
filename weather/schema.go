@@ -187,19 +187,33 @@ var RootQuery = graphql.NewObject(graphql.ObjectConfig{
                 "locationID": &graphql.ArgumentConfig{
                     Type: graphql.String,
                 },
+                "metrics": &graphql.ArgumentConfig{
+                    Type: graphql.NewList(graphql.String),
+                },
             },
             Resolve: func(params graphql.ResolveParams) (interface{}, error) {
                 db := params.Context.Value("db").(Database)
                 wc := params.Context.Value("wc").(WeatherController)
-
-                locationID := params.Args["locationID"].(interface{})
-
+        
+                locationID := params.Args["locationID"].(string)
+        
+                var metrics []string
+                if metricsInterface, ok := params.Args["metrics"].([]interface{}); ok {
+                    for _, metric := range metricsInterface {
+                        if strMetric, ok := metric.(string); ok {
+                            metrics = append(metrics, strMetric)
+                        }
+                    }
+                } else {
+                    fmt.Println("Metrics is nil or not a list.")
+                }
+        
                 var location Location
-                if err := db.d.Read("locations", locationID.(string), &location); err != nil {
+                if err := db.d.Read("locations", locationID, &location); err != nil {
                     return nil, fmt.Errorf("location not found: %v", err)
                 }
-
-                weatherData, err := wc.FetchWeatherForecast(db, location)
+        
+                weatherData, err := wc.FetchWeatherForecast(db, location, metrics)
                 if err != nil {
                     return nil, fmt.Errorf("could not fetch weather data: %v", err)
                 }
