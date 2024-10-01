@@ -125,8 +125,8 @@ func (wc *WeatherController) FetchWeatherForLocations(db Database,lc LocationCon
             weatherInfos = append(weatherInfos, &CurrentWeatherInfo{
                 ID:                 location.ID, // append Location ID
                 LocationName:       location.Name, // Append Location Name
-                Latitude:           fmt.Sprintf("%f", data.Latitude),
-                Longitude:          fmt.Sprintf("%f", data.Longitude),
+                Latitude:           location.Latitude,
+                Longitude:          location.Longitude,
                 Temperature:        data.Current.Temperature2m,
                 CloudCoverage:      data.Current.CloudCover,
                 WindSpeed:          data.Current.WindSpeed80m,
